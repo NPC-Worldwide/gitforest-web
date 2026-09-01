@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started & CLI — GitForest Docs</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta property="og:site_name" content="GitForest">
+    <meta property="og:title" content="Getting Started & CLI — GitForest">
+    <meta property="og:url" content="https://gitforest.net/docs/usage.html">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+    <header id="header">
+        <div class="logo">
+            <a href="/"><img src="../assets/favicon.svg" alt="GitForest"></a>
+            <span class="logo-text">
+                <span class="brand">Git<span>Forest</span></span>
+                <span class="tagline">decentralized p2p git hosting</span>
+            </span>
+        </div>
+        <nav>
+            <a href="/#features">Features</a>
+            <a href="/#how">How it works</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="/docs/">Docs</a>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">GitHub</a>
+            <a class="cta" href="/downloads.html">Get GitForest</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Open Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main>
+        <h1>Getting Started & CLI</h1>
+        <p class="lede">From a fresh install to your first peer-to-peer clone in four commands.</p>
+
+        <h2>1. Create your identity</h2>
+        <pre><code><span class="cmd">$</span> gitforest init</code></pre>
+        <p>Generates an Ed25519 keypair at <code>~/.config/gitforest/identity.key</code>. Your public key <em>is</em> your identity on the network — no accounts, no passwords, no signups.</p>
+
+        <h2>2. Add a repo to the network</h2>
+        <pre><code><span class="cmd">$</span> gitforest add /path/to/your/git/repo --name myproject --description "My cool project"</code></pre>
+        <p>Registers the repo in <code>~/.config/gitforest/config.toml</code> and makes it shareable.</p>
+
+        <h2>3. Start the daemon</h2>
+        <pre><code><span class="cmd">$</span> gitforest daemon</code></pre>
+        <p>This starts:</p>
+        <ul>
+            <li><strong>DHT node</strong> on port 9418 — announces your repos, discovers peers via mDNS on LAN</li>
+            <li><strong>Git protocol server</strong> on port 9419 — direct P2P git fetch/push</li>
+            <li><strong>HTTP API + Web UI</strong> at <a class="inline" href="http://127.0.0.1:7878" target="_blank" rel="noopener">http://127.0.0.1:7878</a></li>
+        </ul>
+
+        <h2>4. Clone from the network</h2>
+        <p>From any other machine running GitForest:</p>
+        <pre><code><span class="cmd">$</span> git clone gitforest://&lt;peer_id&gt;/&lt;repo_name&gt;</code></pre>
+        <p>Requires <code>git-remote-gitforest</code> on your <code>$PATH</code> (the install script handles this).</p>
+
+        <h2>CLI reference</h2>
+        <table>
+            <tr><th>Command</th><th>Description</th></tr>
+            <tr><td><code>gitforest init</code></td><td>Create a new identity</td></tr>
+            <tr><td><code>gitforest id</code></td><td>Show your peer ID</td></tr>
+            <tr><td><code>gitforest add &lt;path&gt;</code></td><td>Add a local git repo to the network</td></tr>
+            <tr><td><code>gitforest list</code></td><td>List hosted repos</td></tr>
+            <tr><td><code>gitforest remove &lt;name&gt;</code></td><td>Remove a repo from the network</td></tr>
+            <tr><td><code>gitforest status</code></td><td>Show network status</td></tr>
+            <tr><td><code>gitforest daemon</code></td><td>Start the daemon</td></tr>
+            <tr><td><code>gitforest blob add &lt;path&gt;</code></td><td>Import a file into the blob store</td></tr>
+            <tr><td><code>gitforest blob list</code></td><td>List all stored blobs</td></tr>
+            <tr><td><code>gitforest blob info &lt;id&gt;</code></td><td>Show blob details (size, pieces, path)</td></tr>
+            <tr><td><code>gitforest blob remove &lt;id&gt;</code></td><td>Remove a blob from the store</td></tr>
+            <tr><td><code>gitforest blob pointer &lt;id&gt;</code></td><td>Generate a pointer file for a blob</td></tr>
+            <tr><td><code>gitforest collection create</code></td><td>Create a collection manifest</td></tr>
+            <tr><td><code>gitforest collection list</code></td><td>List collections</td></tr>
+            <tr><td><code>gitforest collection info &lt;id&gt;</code></td><td>Show collection details</td></tr>
+            <tr><td><code>gitforest compute submit &lt;repo&gt;</code></td><td>Submit a CI job</td></tr>
+            <tr><td><code>gitforest compute status &lt;id&gt;</code></td><td>Check job status</td></tr>
+            <tr><td><code>gitforest compute worker-start</code></td><td>Start offering compute</td></tr>
+            <tr><td><code>gitforest compute worker-stop</code></td><td>Stop offering compute</td></tr>
+            <tr><td><code>gitforest compute offers</code></td><td>List available workers</td></tr>
+            <tr><td><code>gitforest compute wallet &lt;chain&gt; &lt;addr&gt;</code></td><td>Configure payment wallet</td></tr>
+        </table>
+
+        <h2>Web UI</h2>
+        <p>With the daemon running, open <a class="inline" href="http://127.0.0.1:7878" target="_blank" rel="noopener">http://127.0.0.1:7878</a> for:</p>
+        <ul>
+            <li><strong>Repos</strong> — manage hosted repos, view commits/branches/ACLs, copy clone URLs</li>
+            <li><strong>Blobs</strong> — browse stored blobs, seeder/leecher counts, manage collections</li>
+            <li><strong>Compute</strong> — view CI jobs, browse workers, monitor payment channels</li>
+            <li><strong>Network</strong> — connected peers, seeding stats</li>
+            <li><strong>Proposals</strong> — incoming merge requests and patches</li>
+            <li><strong>Identity</strong> — your peer ID and key info</li>
+        </ul>
+
+        <h2>Collaboration</h2>
+        <p>GitForest's collaboration layer (<code>gt-collab</code>) provides signed patches, fork + merge requests, and access control lists — designed for a network with no central authority. Merge requests arrive as <em>proposals</em> in the Web UI.</p>
+
+        <div class="btn-row">
+            <a class="btn btn-primary" href="lfs.html">Next: Large File Storage</a>
+            <a class="btn btn-secondary" href="index.html">All docs</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <span class="brand">Git<span>Forest</span></span>
+            <span>Made by <a href="https://www.enpisi.com" target="_blank" rel="noopener">NPC WORLDWIDE, LLC</a> · Contact <a href="mailto:info@npcworldwi.de">info@npcworldwi.de</a></span>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">github.com/NPC-Worldwide/git-forest</a>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('header').classList.toggle('mobile-nav-open');
+        });
+    </script>
+</body>
+</html>

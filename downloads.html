@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads — GitForest</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <meta property="og:site_name" content="GitForest">
+    <meta property="og:title" content="Downloads — GitForest">
+    <meta property="og:url" content="https://gitforest.net/downloads.html">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+    <header id="header">
+        <div class="logo">
+            <a href="/"><img src="assets/favicon.svg" alt="GitForest"></a>
+            <span class="logo-text">
+                <span class="brand">Git<span>Forest</span></span>
+                <span class="tagline">decentralized p2p git hosting</span>
+            </span>
+        </div>
+        <nav>
+            <a href="/#features">Features</a>
+            <a href="/#how">How it works</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="/docs/">Docs</a>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">GitHub</a>
+            <a class="cta" href="/downloads.html">Get GitForest</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Open Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main class="wide">
+        <h1>Download <span>GitForest</span></h1>
+        <p class="lede">Binaries are built automatically by GitHub Actions on every release tag and published to Google Cloud Storage. Pick your platform below.</p>
+
+        <div class="dl-grid">
+            <div class="dl-card">
+                <span class="os">macOS</span>
+                <h3>Apple Silicon (arm64)</h3>
+                <p>gitforest + git-remote-gitforest + gtfo · tar.gz</p>
+                <a class="dl-btn" href="https://storage.googleapis.com/gitforest-executables/macos-arm64/gitforest-macos-arm64.tar.gz">Download</a>
+            </div>
+            <div class="dl-card">
+                <span class="os">LINUX</span>
+                <h3>x86_64</h3>
+                <p>gitforest + git-remote-gitforest + gtfo · tar.gz</p>
+                <a class="dl-btn" href="https://storage.googleapis.com/gitforest-executables/linux-x64/gitforest-linux-x64.tar.gz">Download</a>
+            </div>
+            <div class="dl-card">
+                <span class="os">DEB</span>
+                <h3>Linux (Debian / Ubuntu)</h3>
+                <p>amd64 · .deb package (gitforest + helper)</p>
+                <a class="dl-btn" href="https://storage.googleapis.com/gitforest-executables/linux-x64/gitforest_amd64.deb">Download</a>
+            </div>
+        </div>
+
+        <div class="callout ok">
+            <p><strong>One-line install (macOS & Linux):</strong></p>
+            <pre><code><span class="cmd">$</span> curl -fsSL https://gitforest.net/docs/install.sh | bash</code></pre>
+            <p class="muted">Installs the latest release to <code>~/.local/bin</code> and adds it to your PATH.</p>
+        </div>
+
+        <h2>Verification</h2>
+        <p>Every release publishes a <code>manifest.json</code> with the current version and direct download URLs. Checksums are included in the release notes on GitHub.</p>
+        <ul>
+            <li><a class="inline" href="https://storage.googleapis.com/gitforest-executables/manifest.json" target="_blank" rel="noopener">Latest manifest.json</a></li>
+            <li><a class="inline" href="https://github.com/NPC-Worldwide/git-forest/releases" target="_blank" rel="noopener">GitHub releases</a> (all versions, source tarballs, checksums)</li>
+        </ul>
+        <p>Verify a download with:</p>
+        <pre><code><span class="cmd">$</span> <span class="arg">tar</span> tzf gitforest-linux-x64.tar.gz
+gitforest/bin/gitforest
+gitforest/bin/git-remote-gitforest
+gitforest/bin/gtfo
+<span class="cmd">$</span> <span class="arg">./gitforest/bin/gitforest</span> --version</code></pre>
+
+        <h2>Platform support</h2>
+        <table>
+            <tr><th>Platform</th><th>Package</th><th>Contents</th></tr>
+            <tr><td>macOS 12+ (arm64)</td><td><code>gitforest-macos-arm64.tar.gz</code></td><td><code>gitforest</code>, <code>git-remote-gitforest</code>, <code>gtfo</code></td></tr>
+            <tr><td>Linux (x86_64)</td><td><code>gitforest-linux-x64.tar.gz</code></td><td><code>gitforest</code>, <code>git-remote-gitforest</code>, <code>gtfo</code></td></tr>
+            <tr><td>Debian / Ubuntu (amd64)</td><td><code>gitforest_&lt;ver&gt;_amd64.deb</code></td><td><code>/usr/bin/gitforest</code>, <code>/usr/bin/git-remote-gitforest</code></td></tr>
+        </table>
+
+        <div class="callout warn">
+            <p><strong>Windows:</strong> not yet supported. Linux (x86_64) and macOS (Apple Silicon) are the current build targets — Windows support is planned.</p>
+        </div>
+
+        <div class="btn-row">
+            <a class="btn btn-primary" href="/docs/install.html">Installation guide</a>
+            <a class="btn btn-secondary" href="/docs/">Browse the docs</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <span class="brand">Git<span>Forest</span></span>
+            <span>Made by <a href="https://www.enpisi.com" target="_blank" rel="noopener">NPC WORLDWIDE, LLC</a> · Contact <a href="mailto:info@npcworldwi.de">info@npcworldwi.de</a></span>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">github.com/NPC-Worldwide/git-forest</a>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('header').classList.toggle('mobile-nav-open');
+        });
+    </script>
+</body>
+</html>

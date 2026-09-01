@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compute Marketplace — GitForest Docs</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta property="og:site_name" content="GitForest">
+    <meta property="og:title" content="Compute Marketplace — GitForest">
+    <meta property="og:url" content="https://gitforest.net/docs/compute.html">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+    <header id="header">
+        <div class="logo">
+            <a href="/"><img src="../assets/favicon.svg" alt="GitForest"></a>
+            <span class="logo-text">
+                <span class="brand">Git<span>Forest</span></span>
+                <span class="tagline">decentralized p2p git hosting</span>
+            </span>
+        </div>
+        <nav>
+            <a href="/#features">Features</a>
+            <a href="/#how">How it works</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="/docs/">Docs</a>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">GitHub</a>
+            <a class="cta" href="/downloads.html">Get GitForest</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Open Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main>
+        <h1>Compute Marketplace</h1>
+        <p class="lede">GitForest includes a decentralized CI/CD system. Peers offer their compute and get paid in crypto for running builds and tests. No central build farm required.</p>
+
+        <h2>As a job submitter</h2>
+        <p>1. Create a <code>.gitforest-ci.yml</code> in your repo root:</p>
+        <pre><code>name: Build and Test
+docker_image: rust:1.75
+timeout_secs: 600
+steps:
+  - name: Build
+    run: cargo build --release
+  - name: Test
+    run: cargo test
+artifacts:
+  - target/release/myapp</code></pre>
+        <p>2. Submit the job:</p>
+        <pre><code><span class="cmd">$</span> gitforest compute submit myrepo --max-sats 10000
+<span class="cmd">$</span> gitforest compute status &lt;job_id&gt;</code></pre>
+
+        <h2>As a compute worker</h2>
+        <p>1. Make sure Docker is installed and running.</p>
+        <p>2. Configure your payment wallet:</p>
+        <pre><code><span class="cmd">$</span> gitforest compute wallet lightning lnbc1your_address...</code></pre>
+        <p>3. Start offering compute:</p>
+        <pre><code><span class="cmd">$</span> gitforest compute worker-start --cpu 4 --ram 8192 --rate 1000</code></pre>
+        <p>4. Restart the daemon — it announces your compute offer on the DHT and jobs start flowing in.</p>
+        <p>Browse available workers with <code>gitforest compute offers</code> and stop offering with <code>gitforest compute worker-stop</code>.</p>
+
+        <h2>Supported payment chains</h2>
+        <ul>
+            <li><strong>Bitcoin Lightning</strong> (default) — fast micropayments, no on-chain transaction per job</li>
+            <li><strong>Ethereum L2</strong> — Arbitrum, Optimism, Base, Polygon</li>
+            <li><strong>Solana</strong></li>
+        </ul>
+        <p>Payment backends are pluggable via the <code>PaymentBackend</code> trait. Chain integrations are actively being wired up — today the implementation is a stub for testing the marketplace flow.</p>
+
+        <h2>Why decentralized CI?</h2>
+        <ul>
+            <li>No vendor lock-in or per-minute pricing on a central build farm</li>
+            <li>Your compute earns crypto when idle</li>
+            <li>Builds run close to the network — repos and artifacts are already P2P</li>
+            <li>Censorship-resistant: nobody can block your CI pipeline</li>
+        </ul>
+
+        <div class="btn-row">
+            <a class="btn btn-primary" href="install.html">Back to Installation</a>
+            <a class="btn btn-secondary" href="index.html">All docs</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <span class="brand">Git<span>Forest</span></span>
+            <span>Made by <a href="https://www.enpisi.com" target="_blank" rel="noopener">NPC WORLDWIDE, LLC</a> · Contact <a href="mailto:info@npcworldwi.de">info@npcworldwi.de</a></span>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">github.com/NPC-Worldwide/git-forest</a>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('header').classList.toggle('mobile-nav-open');
+        });
+    </script>
+</body>
+</html>

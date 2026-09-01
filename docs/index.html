@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation — GitForest</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta property="og:site_name" content="GitForest">
+    <meta property="og:title" content="Documentation — GitForest">
+    <meta property="og:url" content="https://gitforest.net/docs/">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+    <header id="header">
+        <div class="logo">
+            <a href="/"><img src="../assets/favicon.svg" alt="GitForest"></a>
+            <span class="logo-text">
+                <span class="brand">Git<span>Forest</span></span>
+                <span class="tagline">decentralized p2p git hosting</span>
+            </span>
+        </div>
+        <nav>
+            <a href="/#features">Features</a>
+            <a href="/#how">How it works</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="/docs/">Docs</a>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">GitHub</a>
+            <a class="cta" href="/downloads.html">Get GitForest</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Open Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main>
+        <h1>GitForest <span>Documentation</span></h1>
+        <p class="lede">Everything you need to install, use, and understand GitForest — decentralized P2P git hosting.</p>
+
+        <div class="docs-grid">
+            <a class="doc-card" href="install.html">
+                <h3>Installation</h3>
+                <p>Binaries, the one-line script, .deb packages, PATH setup, verification, and upgrades.</p>
+            </a>
+            <a class="doc-card" href="usage.html">
+                <h3>Getting Started & CLI</h3>
+                <p>Identity, adding repos, the daemon, cloning peer-to-peer, and the full CLI reference.</p>
+            </a>
+            <a class="doc-card" href="lfs.html">
+                <h3>Large File Storage (LFS)</h3>
+                <p>Content-addressed blobs, adaptive chunking, collections, and pointer files.</p>
+            </a>
+            <a class="doc-card" href="compute.html">
+                <h3>Compute Marketplace</h3>
+                <p>Decentralized CI/CD: submitting jobs, running workers, and getting paid in crypto.</p>
+            </a>
+        </div>
+
+        <h2>Architecture</h2>
+        <p>GitForest is a Rust workspace of focused crates, all compiled into two binaries (<code>gitforest</code> and <code>git-remote-gitforest</code>) plus the <code>gtfo</code> alias:</p>
+        <pre><code>git clone gitforest://&lt;peer_id&gt;/&lt;repo&gt;
+      |
+      v
+git-remote-gitforest  -->  gitforest daemon
+(custom git transport)     |
+                           +-- DHT Node (libp2p Kademlia + mDNS)
+                           +-- Git Protocol server (port 9419)
+                           +-- Compute Runner (Docker)
+                           +-- HTTP API + Web UI (127.0.0.1:7878)</code></pre>
+        <ul>
+            <li><code>gt-core</code> — identity (Ed25519), config, protocol messages</li>
+            <li><code>gt-dht</code> — libp2p Kademlia + mDNS discovery</li>
+            <li><code>gt-transport</code> — git bundles, smart protocol bridge, piece verification</li>
+            <li><code>gt-collab</code> — signed patches, fork + merge requests, ACLs</li>
+            <li><code>gt-compute</code> — P2P compute marketplace, Docker runner, crypto payments</li>
+            <li><code>gt-lfs</code> — content-addressed blobs, adaptive chunking, collections</li>
+            <li><code>gt-daemon</code> — main binary: CLI, HTTP API, network management</li>
+            <li><code>gt-remote</code> — the <code>git-remote-gitforest</code> git remote helper</li>
+            <li><code>gt-web</code> — embedded web dashboard</li>
+        </ul>
+
+        <h2>Source & project</h2>
+        <ul>
+            <li><a class="inline" href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">github.com/NPC-Worldwide/git-forest</a> — source code (AGPL-3.0)</li>
+            <li><a class="inline" href="https://github.com/NPC-Worldwide/git-forest/releases" target="_blank" rel="noopener">Releases</a> — changelogs, checksums, source archives</li>
+            <li><a class="inline" href="https://github.com/NPC-Worldwide/gitforest-web" target="_blank" rel="noopener">github.com/NPC-Worldwide/gitforest-web</a> — this website's source</li>
+        </ul>
+
+        <div class="btn-row">
+            <a class="btn btn-primary" href="install.html">Start with Installation</a>
+            <a class="btn btn-secondary" href="/downloads.html">Download binaries</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <span class="brand">Git<span>Forest</span></span>
+            <span>Made by <a href="https://www.enpisi.com" target="_blank" rel="noopener">NPC WORLDWIDE, LLC</a> · Contact <a href="mailto:info@npcworldwi.de">info@npcworldwi.de</a></span>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">github.com/NPC-Worldwide/git-forest</a>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('header').classList.toggle('mobile-nav-open');
+        });
+    </script>
+</body>
+</html>

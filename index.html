@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitForest — Decentralized P2P git hosting</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <meta property="og:site_name" content="GitForest">
+    <meta property="og:title" content="GitForest — Decentralized P2P git hosting">
+    <meta property="og:url" content="https://gitforest.net">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Host your own repos, share them over a BitTorrent-style DHT network, and collaborate peer-to-peer. No company controls the network.">
+
+    <meta name="twitter:title" content="GitForest — Decentralized P2P git hosting">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #1c2128;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --text-dim: #484f58;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --green: #3fb950;
+            --red: #f85149;
+            --orange: #d29922;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        a { color: inherit; text-decoration: none; }
+
+        header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(13,17,23,0.92); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.9rem 4vw;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { display: flex; align-items: center; gap: 0.75rem; }
+        .logo img { height: 34px; width: auto; display: block; }
+        .logo-text { display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
+        .logo-text .brand { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.1; }
+        .logo-text .brand span { color: var(--accent); }
+        .logo-text .tagline { font-size: 0.7rem; font-weight: 400; color: var(--text-muted); line-height: 1.1; }
+        nav { display: flex; gap: 1.75rem; align-items: center; }
+        nav a { font-size: 0.92rem; font-weight: 500; color: var(--text-muted); transition: color 0.2s; }
+        nav a:hover { color: var(--text); }
+        nav a.cta { background: var(--accent); color: #0d1117; font-weight: 600; padding: 0.45rem 1.1rem; border-radius: 6px; transition: background 0.2s; }
+        nav a.cta:hover { background: var(--accent-hover); color: #0d1117; }
+        .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 5px; }
+        .mobile-menu-btn span { display: block; width: 24px; height: 2px; background: var(--text); }
+        @media (max-width: 768px) {
+            .logo img { height: 28px; }
+            nav { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .mobile-nav-open nav {
+                display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0;
+                background: rgba(13,17,23,0.98); padding: 1rem 4vw; gap: 1rem;
+                border-bottom: 1px solid var(--border); align-items: flex-start;
+            }
+        }
+
+        .hero { padding: calc(110px + 6vw) 4vw 4vw; text-align: center; max-width: 900px; margin: 0 auto; }
+        .hero .badge { display: inline-block; font-size: 0.8rem; font-weight: 600; color: var(--green); border: 1px solid rgba(63,185,80,0.4); background: rgba(63,185,80,0.08); padding: 0.25rem 0.8rem; border-radius: 20px; margin-bottom: 1.5rem; }
+        .hero h1 { font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1.25rem; }
+        .hero h1 span { color: var(--accent); }
+        .hero p.lede { font-size: clamp(1.05rem, 2vw, 1.3rem); color: var(--text-muted); max-width: 640px; margin: 0 auto 2rem; }
+        .hero .buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn { display: inline-block; font-size: 1rem; font-weight: 600; padding: 0.8rem 1.8rem; border-radius: 8px; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: #0d1117; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+        .hero .code { margin: 2.5rem auto 0; max-width: 640px; text-align: left; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; color: var(--text-muted); overflow-x: auto; }
+        .hero .code .prompt { color: var(--green); }
+        .hero .code .arg { color: var(--accent); }
+
+        section { padding: 5vw 4vw; max-width: 1200px; margin: 0 auto; }
+        section h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -0.01em; text-align: center; margin-bottom: 0.75rem; }
+        section .sub { text-align: center; color: var(--text-muted); max-width: 640px; margin: 0 auto 3rem; }
+
+        .features { background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); max-width: none; }
+        .features .inner { max-width: 1200px; margin: 0 auto; padding: 5vw 4vw; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .feature-card { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem; transition: border-color 0.2s, transform 0.2s; }
+        .feature-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .feature-card .icon { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; color: var(--accent); background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.35); padding: 0.3rem 0.55rem; border-radius: 5px; margin-bottom: 0.85rem; }
+        .feature-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .feature-card p { font-size: 0.92rem; color: var(--text-muted); }
+        .feature-card code { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--accent); background: var(--bg-secondary); padding: 0.1rem 0.35rem; border-radius: 4px; }
+        @media (max-width: 968px) { .feature-grid { grid-template-columns: 1fr; } }
+
+        .how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1100px; margin: 0 auto; }
+        .step { text-align: center; }
+        .step .num { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.4); color: var(--accent); font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem; }
+        .step h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+        .step p { font-size: 0.92rem; color: var(--text-muted); }
+        .step code { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--green); background: var(--bg-secondary); padding: 0.1rem 0.35rem; border-radius: 4px; }
+        @media (max-width: 968px) { .how-steps { grid-template-columns: 1fr; } }
+
+        .downloads { background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); max-width: none; }
+        .downloads .inner { max-width: 1200px; margin: 0 auto; padding: 5vw 4vw; }
+        .dl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+        .dl-card { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem; text-align: center; transition: border-color 0.2s, transform 0.2s; }
+        .dl-card:hover { border-color: var(--green); transform: translateY(-2px); }
+        .dl-card .os { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; color: var(--green); background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.35); padding: 0.25rem 0.55rem; border-radius: 5px; margin-bottom: 0.75rem; }
+        .dl-card h3 { font-size: 1.15rem; margin: 0 0 0.25rem; }
+        .dl-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+        .dl-card .dl-btn { display: inline-block; background: var(--green); color: #0d1117; font-weight: 600; font-size: 0.92rem; padding: 0.6rem 1.4rem; border-radius: 6px; transition: opacity 0.2s; }
+        .dl-card .dl-btn:hover { opacity: 0.85; }
+        .dl-note { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 2rem; }
+        .dl-note a { color: var(--accent); text-decoration: underline; }
+        @media (max-width: 968px) { .dl-grid { grid-template-columns: 1fr; } }
+
+        .docs-cta { text-align: center; }
+        .docs-cta h2 { margin-bottom: 1rem; }
+        .docs-cta p { color: var(--text-muted); max-width: 560px; margin: 0 auto 2rem; }
+        .docs-cta .btn { margin: 0 0.5rem; }
+
+        footer { border-top: 1px solid var(--border); padding: 2.5rem 4vw; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-content .brand { font-weight: 700; }
+        .footer-content .brand span { color: var(--accent); }
+        .footer-content a { color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+        .footer-content a:hover { color: var(--accent); }
+        @media (max-width: 768px) { .footer-content { flex-direction: column; text-align: center; } }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div class="logo">
+            <a href="/"><img src="assets/favicon.svg" alt="GitForest"></a>
+            <span class="logo-text">
+                <span class="brand">Git<span>Forest</span></span>
+                <span class="tagline">decentralized p2p git hosting</span>
+            </span>
+        </div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#how">How it works</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="/docs/">Docs</a>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">GitHub</a>
+            <a class="cta" href="/downloads.html">Get GitForest</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Open Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <section class="hero">
+        <span class="badge">Open source · AGPL-3.0 · No central servers</span>
+        <h1>Host your repos. Share them <span>peer-to-peer</span>.</h1>
+        <p class="lede">GitForest is decentralized P2P git hosting. You host your own repos, share them over a BitTorrent-style DHT network, and collaborate directly with other peers. Seeder and leecher counts are your quality signals — no company controls the network.</p>
+        <div class="buttons">
+            <a class="btn btn-primary" href="/downloads.html">Download GitForest</a>
+            <a class="btn btn-secondary" href="/docs/">Read the docs</a>
+        </div>
+        <div class="code">
+            <span class="prompt">$</span> git clone <span class="arg">gitforest://&lt;peer_id&gt;/myrepo</span><br>
+            <span class="prompt">$</span> gitforest daemon &nbsp;<span style="color:#484f58"># web UI at http://127.0.0.1:7878</span>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="inner">
+            <h2>Why GitForest</h2>
+            <p class="sub">Git is already a decentralized VCS — GitForest just gives it a proper P2P hosting layer.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="icon">P2P</span>
+                    <h3>True P2P hosting</h3>
+                    <p>Repos are announced over a Kademlia DHT and discovered via mDNS on your LAN. Clone and push directly peer-to-peer over the Git protocol — no servers in the middle.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">LFS</span>
+                    <h3>Decentralized LFS</h3>
+                    <p>Large file storage for ML model weights, datasets, and big artifacts. Content-addressed blobs with adaptive chunking and BitTorrent-style piece verification.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">CI</span>
+                    <h3>Compute marketplace</h3>
+                    <p>A decentralized CI/CD system. Submit jobs, or offer your own compute and get paid in crypto — Lightning, Ethereum L2, and Solana backends.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">KEY</span>
+                    <h3>Identity is a keypair</h3>
+                    <p>Your Ed25519 public key <em>is</em> your identity. <code>gitforest init</code> and you're on the network — no accounts, no passwords, no signups.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">FORK</span>
+                    <h3>Collaboration built in</h3>
+                    <p>Signed patches, fork + merge requests, and access control lists — collaboration primitives designed for a network with no central authority.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">WEB</span>
+                    <h3>Web UI & CLI</h3>
+                    <p>Manage repos, blobs, compute jobs, and peers from the local web dashboard at <code>127.0.0.1:7878</code> or from the terminal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how" id="how">
+        <h2>Up and running in four commands</h2>
+        <p class="sub">No accounts. No hosting bills. Just a keypair and a daemon.</p>
+        <div class="how-steps">
+            <div class="step">
+                <div class="num">1</div>
+                <h3>Create your identity</h3>
+                <p><code>gitforest init</code></p>
+                <p>Generates an Ed25519 keypair at <code>~/.config/gitforest/</code>. Your public key is your peer ID.</p>
+            </div>
+            <div class="step">
+                <div class="num">2</div>
+                <h3>Add a repo</h3>
+                <p><code>gitforest add ./myrepo</code></p>
+                <p>Registers any local git repo to share on the network.</p>
+            </div>
+            <div class="step">
+                <div class="num">3</div>
+                <h3>Start the daemon</h3>
+                <p><code>gitforest daemon</code></p>
+                <p>Announces your repos on the DHT and starts the Git protocol server for direct P2P clone/push.</p>
+            </div>
+            <div class="step">
+                <div class="num">4</div>
+                <h3>Clone anywhere</h3>
+                <p><code>git clone gitforest://&lt;peer_id&gt;/repo</code></p>
+                <p>From any other machine running GitForest. That's it.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="downloads" id="downloads">
+        <div class="inner">
+            <h2>Downloads</h2>
+            <p class="sub">Binaries are built in CI on every release tag and published to Google Cloud Storage.</p>
+            <div class="dl-grid">
+                <div class="dl-card">
+                    <span class="os">macOS</span>
+                    <h3>Apple Silicon</h3>
+                    <p>arm64 · tar.gz</p>
+                    <a class="dl-btn" href="https://storage.googleapis.com/gitforest-executables/macos-arm64/gitforest-macos-arm64.tar.gz">Download</a>
+                </div>
+                <div class="dl-card">
+                    <span class="os">LINUX</span>
+                    <h3>x86_64</h3>
+                    <p>tar.gz</p>
+                    <a class="dl-btn" href="https://storage.googleapis.com/gitforest-executables/linux-x64/gitforest-linux-x64.tar.gz">Download</a>
+                </div>
+                <div class="dl-card">
+                    <span class="os">DEB</span>
+                    <h3>Linux (Debian)</h3>
+                    <p>amd64 · .deb package</p>
+                    <a class="dl-btn" href="https://storage.googleapis.com/gitforest-executables/linux-x64/gitforest_amd64.deb">Download</a>
+                </div>
+            </div>
+            <p class="dl-note">Prefer a script? <a href="/docs/install.html">Install via curl script</a> · All versions and checksums in the <a href="https://storage.googleapis.com/gitforest-executables/manifest.json" target="_blank" rel="noopener">manifest</a>.</p>
+        </div>
+    </section>
+
+    <section class="docs-cta">
+        <h2>Documentation & guidance</h2>
+        <p>Getting started, CLI reference, LFS, the compute marketplace, and the full architecture.</p>
+        <a class="btn btn-primary" href="/docs/">Browse the docs</a>
+        <a class="btn btn-secondary" href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">Source code</a>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <span class="brand">Git<span>Forest</span></span>
+            <span>Made by <a href="https://www.enpisi.com" target="_blank" rel="noopener">NPC WORLDWIDE, LLC</a> · Contact <a href="mailto:info@npcworldwi.de">info@npcworldwi.de</a></span>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">github.com/NPC-Worldwide/git-forest</a>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('header').classList.toggle('mobile-nav-open');
+        });
+    </script>
+</body>
+</html>

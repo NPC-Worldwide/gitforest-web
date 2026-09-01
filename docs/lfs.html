@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Large File Storage (LFS) — GitForest Docs</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta property="og:site_name" content="GitForest">
+    <meta property="og:title" content="Large File Storage (LFS) — GitForest">
+    <meta property="og:url" content="https://gitforest.net/docs/lfs.html">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+    <header id="header">
+        <div class="logo">
+            <a href="/"><img src="../assets/favicon.svg" alt="GitForest"></a>
+            <span class="logo-text">
+                <span class="brand">Git<span>Forest</span></span>
+                <span class="tagline">decentralized p2p git hosting</span>
+            </span>
+        </div>
+        <nav>
+            <a href="/#features">Features</a>
+            <a href="/#how">How it works</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="/docs/">Docs</a>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">GitHub</a>
+            <a class="cta" href="/downloads.html">Get GitForest</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Open Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main>
+        <h1>Large File Storage (LFS)</h1>
+        <p class="lede">GitForest includes decentralized large file storage for sharing ML model weights, datasets, and other big artifacts over the P2P network — think Git LFS, but fully decentralized with BitTorrent-style distribution.</p>
+
+        <h2>How it works</h2>
+        <ol>
+            <li><strong>Content-addressed blobs</strong> — files are hashed (SHA-256) and stored outside git. The hash <em>is</em> the file's identity on the network.</li>
+            <li><strong>Adaptive chunking</strong> — files are split into pieces for parallel download and verification:
+                <ul>
+                    <li>&lt; 100 MB: 256 KB pieces</li>
+                    <li>100 MB – 1 GB: 1 MB pieces</li>
+                    <li>&gt;= 1 GB: 4 MB pieces</li>
+                </ul>
+            </li>
+            <li><strong>Piece verification</strong> — each piece is verified against its hash as it arrives (BitTorrent-style), so corrupted transfers are detected and retried automatically.</li>
+            <li><strong>Seeding</strong> — peers who hold a blob seed it for others; seeder/leecher counts are the organic quality signal.</li>
+        </ol>
+
+        <h2>Blob commands</h2>
+        <pre><code><span class="cmd">$</span> gitforest blob add ./model-weights.bin
+<span class="cmd">$</span> gitforest blob list
+<span class="cmd">$</span> gitforest blob info &lt;id&gt;          <span class="cmt"># size, pieces, path</span>
+<span class="cmd">$</span> gitforest blob pointer &lt;id&gt;     <span class="cmt"># generate a git pointer file</span>
+<span class="cmd">$</span> gitforest blob remove &lt;id&gt;</code></pre>
+
+        <h2>Pointer files</h2>
+        <p>Instead of committing big binaries into git history, commit a tiny pointer file that references the blob by hash:</p>
+        <pre><code>version https://gitforest.net/lfs/v1
+oid sha256:&lt;blob_id&gt;
+size &lt;bytes&gt;</code></pre>
+        <p>Anyone cloning the repo can fetch the referenced blob from the P2P network on demand.</p>
+
+        <h2>Collections (models & datasets)</h2>
+        <p>Group many blobs into a named, versioned collection manifest — perfect for ML model weights, dataset bundles, or release artifacts:</p>
+        <pre><code><span class="cmd">$</span> gitforest collection create --name my-dataset --blobs &lt;id1&gt;,&lt;id2&gt;
+<span class="cmd">$</span> gitforest collection list
+<span class="cmd">$</span> gitforest collection info &lt;id&gt;</code></pre>
+
+        <h2>Use cases</h2>
+        <ul>
+            <li>Sharing ML model weights without a central hub</li>
+            <li>Distributing large datasets with built-in verification</li>
+            <li>Release artifact mirrors that peers can seed</li>
+            <li>Backing up large project assets across machines you control</li>
+        </ul>
+
+        <div class="btn-row">
+            <a class="btn btn-primary" href="compute.html">Next: Compute Marketplace</a>
+            <a class="btn btn-secondary" href="index.html">All docs</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <span class="brand">Git<span>Forest</span></span>
+            <span>Made by <a href="https://www.enpisi.com" target="_blank" rel="noopener">NPC WORLDWIDE, LLC</a> · Contact <a href="mailto:info@npcworldwi.de">info@npcworldwi.de</a></span>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">github.com/NPC-Worldwide/git-forest</a>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('header').classList.toggle('mobile-nav-open');
+        });
+    </script>
+</body>
+</html>

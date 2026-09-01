@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation — GitForest Docs</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta property="og:site_name" content="GitForest">
+    <meta property="og:title" content="Installation — GitForest">
+    <meta property="og:url" content="https://gitforest.net/docs/install.html">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+    <header id="header">
+        <div class="logo">
+            <a href="/"><img src="../assets/favicon.svg" alt="GitForest"></a>
+            <span class="logo-text">
+                <span class="brand">Git<span>Forest</span></span>
+                <span class="tagline">decentralized p2p git hosting</span>
+            </span>
+        </div>
+        <nav>
+            <a href="/#features">Features</a>
+            <a href="/#how">How it works</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="/docs/">Docs</a>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">GitHub</a>
+            <a class="cta" href="/downloads.html">Get GitForest</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Open Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <main>
+        <h1>Installation</h1>
+        <p class="lede">Install GitForest on macOS or Linux in under a minute. No Rust toolchain needed — prebuilt binaries are published to Google Cloud Storage from CI.</p>
+
+        <h2>Quick install (macOS & Linux)</h2>
+        <p>Install the latest release for your platform to <code>~/.local/bin</code>:</p>
+        <pre><code><span class="cmd">$</span> curl -fsSL https://gitforest.net/docs/install.sh | bash</code></pre>
+        <p>This installs three binaries:</p>
+        <ul>
+            <li><code>gitforest</code> — the daemon + CLI</li>
+            <li><code>git-remote-gitforest</code> — the git remote helper that makes <code>gitforest://</code> URLs work</li>
+            <li><code>gtfo</code> — a shorter alias for <code>gitforest</code></li>
+        </ul>
+        <div class="callout warn"><p>If your shell doesn't pick up <code>~/.local/bin</code>, either open a new terminal or add it to your PATH: <code>export PATH="$HOME/.local/bin:$PATH"</code></p></div>
+
+        <h2>Manual download</h2>
+        <p>Grab the archive for your platform from the <a class="inline" href="/downloads.html">downloads page</a>:</p>
+        <pre><code><span class="cmd">$</span> <span class="arg">tar</span> xzf gitforest-linux-x64.tar.gz
+<span class="cmd">$</span> <span class="arg">sudo</span> cp -r gitforest/bin/* /usr/local/bin/
+<span class="cmd">$</span> gitforest --version</code></pre>
+
+        <h2>Debian / Ubuntu (.deb)</h2>
+        <pre><code><span class="cmd">$</span> <span class="arg">sudo</span> apt install ./gitforest_&lt;version&gt;_amd64.deb
+<span class="cmd">$</span> gitforest --version</code></pre>
+
+        <h2>Build from source</h2>
+        <p>Prefer to build yourself? You need Rust (stable) and git:</p>
+        <pre><code><span class="cmd">$</span> git clone https://github.com/NPC-Worldwide/git-forest
+<span class="cmd">$</span> cd git-forest
+<span class="cmd">$</span> cargo build --release
+<span class="cmd">#</span> binaries land in target/release/{gitforest,git-remote-gitforest,gtfo}</code></pre>
+        <p>Docker is only required for compute worker mode (running CI jobs for other peers).</p>
+
+        <h2>Verify the install</h2>
+        <pre><code><span class="cmd">$</span> gitforest --version
+<span class="cmd">$</span> gitforest help
+<span class="cmd">$</span> git remote-helper --help   <span class="cmt"># (if git-remote-gitforest is on PATH)</span></code></pre>
+        <p>For reproducible installs, download <code>manifest.json</code> from the executables bucket to see the exact version and URLs, and cross-check checksums published with each GitHub release.</p>
+
+        <h2>Upgrading</h2>
+        <p>Re-run the install script — it always fetches the latest release and replaces the binaries in place.</p>
+
+        <h2>Uninstalling</h2>
+        <pre><code><span class="cmd">$</span> rm ~/.local/bin/gitforest ~/.local/bin/git-remote-gitforest ~/.local/bin/gtfo
+<span class="cmd">#</span> optionally remove your identity + config:
+<span class="cmd">$</span> rm -rf ~/.config/gitforest</code></pre>
+
+        <div class="btn-row">
+            <a class="btn btn-primary" href="usage.html">Next: Getting Started & CLI</a>
+            <a class="btn btn-secondary" href="index.html">All docs</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <span class="brand">Git<span>Forest</span></span>
+            <span>Made by <a href="https://www.enpisi.com" target="_blank" rel="noopener">NPC WORLDWIDE, LLC</a> · Contact <a href="mailto:info@npcworldwi.de">info@npcworldwi.de</a></span>
+            <a href="https://github.com/NPC-Worldwide/git-forest" target="_blank" rel="noopener">github.com/NPC-Worldwide/git-forest</a>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('header').classList.toggle('mobile-nav-open');
+        });
+    </script>
+</body>
+</html>
