@@ -1,0 +1,9 @@
+# Never sync these to the public website bucket
+.git/
+.github/
+.gitignore
+.gcloudignore
+README.md
+gha-creds-*
+.DS_Store
+*.swp
